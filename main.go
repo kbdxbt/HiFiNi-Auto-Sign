@@ -17,6 +17,14 @@ func main() {
 		fmt.Println("签到失败")
 		os.Exit(3)
 	}
+
+	success1 := SignIn1(client)
+	if success1 {
+		fmt.Println("获取成功")
+	} else {
+		fmt.Println("获取失败")
+		os.Exit(3)
+	}
 }
 
 // SignIn 签到
@@ -41,4 +49,27 @@ func SignIn(client *http.Client) bool {
 	buf, _ := ioutil.ReadAll(response.Body)
 	fmt.Println(string(buf))
 	return strings.Contains(string(buf), "成功")
+}
+
+func SignIn1(client *http.Client) bool {
+	//生成要访问的url
+	url := "https://w1.v2ai.top/user/checkin"
+	cookie := os.Getenv("COOKIE1")
+	if cookie == "" {
+		fmt.Println("COOKIE不存在，请检查是否添加")
+		return false
+	}
+	//提交请求
+	reqest, err := http.NewRequest("POST", url, nil)
+	reqest.Header.Add("Cookie", cookie)
+	reqest.Header.Add("x-requested-with", "XMLHttpRequest")
+	//处理返回结果
+	response, err := client.Do(reqest)
+	if err != nil {
+		panic(err)
+	}
+	defer response.Body.Close()
+	buf, _ := ioutil.ReadAll(response.Body)
+	fmt.Println(string(buf))
+	return strings.Contains(string(buf), "获得")
 }
