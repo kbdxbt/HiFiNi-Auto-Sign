@@ -71,5 +71,5 @@ func SignIn1(client *http.Client) bool {
 	defer response.Body.Close()
 	buf, _ := ioutil.ReadAll(response.Body)
 	fmt.Println(string(buf))
-	return strings.Contains(string(buf), "获得")
+	return strings.Contains(string(buf), "MB")
 }
